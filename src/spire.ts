@@ -8,6 +8,75 @@ export interface Spire {
     draw(ctx: CanvasRenderingContext2D): void;
 }
 
+export class RGBBubbleSpire implements Spire {
+    point: Point;
+    radius: number;
+    r: number;
+    g: number;
+    b: number;
+    dc: number;
+    radiusProcessed: number;
+    radForward: number;
+
+    constructor(radius: number = 5, point?: Point) {
+        this.point = point??new Point(0, 0);
+        this.radius = radius;
+        this.r = 180;
+        this.b = 60;
+        this.g = 100;
+        this.dc = 0.1;
+        this.radForward = 1;
+        this.radiusProcessed = radius;
+    }
+
+    update(point: Point): void {
+        this.point = point;
+    }
+
+    private getColor(): string {
+        var r = Math.floor(Math.random() * 180);
+        var g = Math.floor(Math.random() * 160);
+        var b = Math.floor(Math.random() * 100);
+        return `rgb(${r},${g},${b})`;
+    }
+
+    getRadius(): number {
+        let factor = 0.03;
+        if (this.radiusProcessed > this.radius *1.3) {
+            this.radForward = 0;
+        }
+
+        if (this.radiusProcessed < this.radius *0.7) {
+            this.radForward = 1;
+        }
+        if (this.radForward == 1) {
+            this.radiusProcessed *= (1 + factor);
+        } else {
+            this.radiusProcessed *= (1 - factor);
+        } 
+        return this.radiusProcessed;
+    }
+
+    draw(ctx: CanvasRenderingContext2D): void {
+        ctx.beginPath();
+        let x = this.point.x;
+        let y = this.point.y;
+        let radius = this.getRadius();
+        ctx.shadowBlur = 80;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        ctx.fillStyle = this.getColor();
+        ctx.shadowColor = this.getColor();
+        
+        ctx.arc(x, y, radius, 0, 2 * Math.PI, true);
+        // ctx.fillStyle = grt;
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fill();
+        ctx.closePath();
+    }
+    
+}
+
 export class BubbleSpire implements Spire {
     point: Point;
     radius: number;

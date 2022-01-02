@@ -1,5 +1,8 @@
-import {Spire, BubbleSpire}  from "./spire";
+import {Spire, BubbleSpire, RGBBubbleSpire}  from "./spire";
 import { Point } from "./point";
+
+
+let count = 0;
 
 class SvgPath {
     private svgPath!: SVGPathElement;
@@ -74,9 +77,17 @@ document.addEventListener("DOMContentLoaded", () => {
     sp.radius = idx;
     move.addSpire(sp);
     let start = () => {
+        count++;
+        if (count % 300 == 0) {
+            let sp = new RGBBubbleSpire(idx);
+            sp.radius = idx;
+            move.setStep(3);
+            move.addSpire(sp)
+        }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         move.draw(ctx);
-        if (move.spireLen() == 0) {
+        if (move.spireLen() == 2) {
+            count == 0;
             let sp = new BubbleSpire(idx);
             sp.radius = idx;
             move.setStep(3);
