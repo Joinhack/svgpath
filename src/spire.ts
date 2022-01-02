@@ -8,36 +8,16 @@ export interface Spire {
     draw(ctx: CanvasRenderingContext2D): void;
 }
 
-export class RGBBubbleSpire implements Spire {
+class Bubble {
     point: Point;
     radius: number;
-    r: number;
-    g: number;
-    b: number;
-    dc: number;
     radiusProcessed: number;
     radForward: number;
-
     constructor(radius: number = 5, point?: Point) {
         this.point = point??new Point(0, 0);
         this.radius = radius;
-        this.r = 180;
-        this.b = 60;
-        this.g = 100;
-        this.dc = 0.1;
         this.radForward = 1;
         this.radiusProcessed = radius;
-    }
-
-    update(point: Point): void {
-        this.point = point;
-    }
-
-    private getColor(): string {
-        var r = Math.floor(Math.random() * 180);
-        var g = Math.floor(Math.random() * 160);
-        var b = Math.floor(Math.random() * 100);
-        return `rgb(${r},${g},${b})`;
     }
 
     getRadius(): number {
@@ -57,6 +37,33 @@ export class RGBBubbleSpire implements Spire {
         return this.radiusProcessed;
     }
 
+}
+
+export class RGBBubbleSpire extends Bubble implements Spire {
+    r: number;
+    g: number;
+    b: number;
+    dc: number;
+    constructor(radius: number = 5, point?: Point) {
+        super(radius, point);
+        this.r = 180;
+        this.b = 60;
+        this.g = 100;
+        this.dc = 0.1;
+        
+    }
+
+    update(point: Point): void {
+        this.point = point;
+    }
+
+    private getColor(): string {
+        var r = Math.floor(Math.random() * 180);
+        var g = Math.floor(Math.random() * 160);
+        var b = Math.floor(Math.random() * 100);
+        return `rgb(${r},${g},${b})`;
+    }
+    
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.beginPath();
         let x = this.point.x;
@@ -69,7 +76,6 @@ export class RGBBubbleSpire implements Spire {
         ctx.shadowColor = this.getColor();
         
         ctx.arc(x, y, radius, 0, 2 * Math.PI, true);
-        // ctx.fillStyle = grt;
         ctx.globalCompositeOperation = 'lighter';
         ctx.fill();
         ctx.closePath();
@@ -77,19 +83,14 @@ export class RGBBubbleSpire implements Spire {
     
 }
 
-export class BubbleSpire implements Spire {
-    point: Point;
-    radius: number;
+export class BubbleSpire extends Bubble implements Spire {
     hue: number;
     brightness: number;
     saturation: number;
     dc: number;
-    radiusProcessed: number;
-    radForward: number;
 
     constructor(radius: number = 5, point?: Point) {
-        this.point = point??new Point(0, 0);
-        this.radius = radius;
+        super(radius, point);
         this.hue = 360;
         this.brightness = 255;
         this.saturation = 100;
@@ -122,23 +123,6 @@ export class BubbleSpire implements Spire {
         let brightness = this.brightness;
         let saturation = this.saturation - satur;
         return `hsla(${hue}, ${brightness}%, ${saturation}%, 1)`;
-    }
-
-    getRadius(): number {
-        let factor = 0.03;
-        if (this.radiusProcessed > this.radius *1.3) {
-            this.radForward = 0;
-        }
-
-        if (this.radiusProcessed < this.radius *0.7) {
-            this.radForward = 1;
-        }
-        if (this.radForward == 1) {
-            this.radiusProcessed *= (1 + factor);
-        } else {
-            this.radiusProcessed *= (1 - factor);
-        } 
-        return this.radiusProcessed;
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
