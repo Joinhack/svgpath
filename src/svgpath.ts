@@ -1,10 +1,7 @@
 import {Spire, BubbleSpire, RGBBubbleSpire}  from "./spire";
 import { Point } from "./point";
 
-
-let count = 0;
-
-class SvgPath {
+export class SvgPath {
     private svgPath!: SVGPathElement;
 
     public constructor(svgPath: SVGPathElement) {
@@ -22,10 +19,14 @@ class SvgPath {
     
 }
 
-class SvgPathMove {
+export class SvgPathMove {
     private svgPath!: SvgPath;
 
     private step: number = 1;
+
+    private xScale: number = 1;
+    
+    private yScale: number = 1;
 
     private spires: Spire[];
 
@@ -57,6 +58,7 @@ class SvgPathMove {
                 let nidx = index + this.step;
                 let p = this.svgPath.getPoint(nidx);
                 p.index = nidx;
+                p = p.scale(this.xScale, this.yScale);
                 obj.update(p);
                 return true;
             }
@@ -65,37 +67,3 @@ class SvgPathMove {
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    let svg_3: SVGPathElement = document.querySelector("#svg_3")!;
-    let canvas: HTMLCanvasElement = document.querySelector('#canv')!;
-    let ctx = canvas.getContext("2d")!;
-    let svgPath = new SvgPath(svg_3);
-    let move = new SvgPathMove(svgPath);
-    move.setStep(2.5);
-    let idx = 10;
-    let sp = new BubbleSpire(idx);
-    sp.radius = idx;
-    move.addSpire(sp);
-    let start = () => {
-        count++;
-        if (count % 300 == 0) {
-            let sp = new RGBBubbleSpire(idx);
-            sp.radius = idx;
-            move.setStep(3);
-            move.addSpire(sp)
-        }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        move.draw(ctx);
-        if (move.spireLen() == 2) {
-            count == 0;
-            let sp = new BubbleSpire(idx);
-            sp.radius = idx;
-            move.setStep(3);
-            move.addSpire(sp);
-        }
-        window.requestAnimationFrame(() =>{ 
-            start();
-        })
-    };
-    start();
-});

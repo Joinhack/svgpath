@@ -94,7 +94,7 @@ export class BubbleSpire extends Bubble implements Spire {
         this.hue = 360;
         this.brightness = 255;
         this.saturation = 100;
-        this.dc = 0.4;
+        this.dc = 0.5;
         this.radForward = 1;
         this.radiusProcessed = radius;
     }
@@ -103,17 +103,13 @@ export class BubbleSpire extends Bubble implements Spire {
         this.point = point;
         if(this.hue > 0){
             this.hue -= this.dc;
-        } else {
-            this.hue = 360;
-        }
-        if(this.brightness > 0){
+        } else if(this.brightness > 0){
             this.brightness -= this.dc;
-        } else {
-            this.brightness = 100;
-        }
-        if(this.saturation > 0){
+        } else if(this.saturation > 0){
             this.saturation -= this.dc;
         } else {
+            this.hue = 360;
+            this.brightness = 100;
             this.saturation = 100;
         }
     }
@@ -135,7 +131,6 @@ export class BubbleSpire extends Bubble implements Spire {
         grt.addColorStop(1.0, this.getColor(30));
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
         ctx.fillStyle = grt;
-        ctx.globalCompositeOperation = 'lighter';
         ctx.fill();
         ctx.closePath();
     }

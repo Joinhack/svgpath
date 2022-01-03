@@ -7,4 +7,8 @@ export class Point {
         this.y = y;
         this.index = index;
     }
+
+    scale(xScale: number, yScale: number): Point {
+        return new Point(this.x* xScale, this.y* yScale, this.index);
+    }
 }
