@@ -11,7 +11,8 @@ export default defineConfig({
 			output: {
 				manualChunks: () => "svgpath.js",
 			},
-		}
+		},
+        sourcemap: true,
     },
     
     server: {

@@ -4,7 +4,8 @@
     "version": "1.0.0",
     "scripts": {
         "build": "vite build .",
-        "dev": "vite -c vite.config.ts"
+        "dev": "vite -c vite.config.ts",
+        "clean": "rm node_modules dist -rf"
     },
     "devDependencies": {
         "vite": "^2.6.14",
