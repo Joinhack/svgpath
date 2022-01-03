@@ -13,6 +13,11 @@ class Bubble {
     radius: number;
 
     radiusProcessed: number;
+
+    radiusFactor: number = 0.5;
+
+    stepFactor: number = 0.03;
+
     radForward: number;
     constructor(radius: number = 5, point?: Point) {
         this.point = point??new Point(0, 0);
@@ -22,12 +27,12 @@ class Bubble {
     }
 
     getRadius(): number {
-        let factor = 0.03;
-        if (this.radiusProcessed > this.radius *1.3) {
+        let factor = this.stepFactor;
+        if (this.radiusProcessed > this.radius *(1 + this.radiusFactor)) {
             this.radForward = 0;
         }
 
-        if (this.radiusProcessed < this.radius *0.7) {
+        if (this.radiusProcessed < this.radius *(1 - this.radiusFactor)) {
             this.radForward = 1;
         }
         if (this.radForward == 1) {
@@ -83,8 +88,7 @@ export class RGBBubbleSpire extends Bubble implements Spire {
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
         ctx.fillStyle = this.getColor(0);
-        ctx.shadowColor = this.getColor(-60);
-        
+        ctx.shadowColor = this.getColor(60);
         ctx.arc(x, y, radius, 0, 2 * Math.PI, true);
         ctx.globalCompositeOperation = 'lighter';
         ctx.fill();
@@ -101,10 +105,11 @@ export class BubbleSpire extends Bubble implements Spire {
 
     constructor(radius: number = 5, point?: Point) {
         super(radius, point);
-        this.hue = 360;
-        this.brightness = 255;
+        this.hue = Math.floor(Math.random()*360) + 1;
+        this.brightness = 160;
         this.saturation = 100;
         this.dc = 0.5;
+        
         this.radForward = 1;
         this.radiusProcessed = radius;
     }
@@ -138,9 +143,14 @@ export class BubbleSpire extends Bubble implements Spire {
         let radius = this.getRadius();
         let grt = ctx.createRadialGradient( x, y, 0, x, y, radius);
         grt.addColorStop(0.0, this.getColor(0));
-        grt.addColorStop(1.0, this.getColor(30));
+        grt.addColorStop(1.0, this.getColor(35));
+        ctx.shadowBlur = 60;
+        ctx.shadowOffsetX = 20;
+        ctx.shadowOffsetY = 20;
+        ctx.globalCompositeOperation = 'lighter';
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
         ctx.fillStyle = grt;
+        ctx.shadowColor = this.getColor(100);
         ctx.fill();
         ctx.closePath();
     }

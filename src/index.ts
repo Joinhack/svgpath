@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let svgPath = new SvgPath(svg_3);
     let move = new SvgPathMove(svgPath);
     move.setStep(2.5);
-    let idx = 10;
+    let idx = 8;
     let sp = new BubbleSpire(idx);
     sp.radius = idx;
     move.addSpire(sp);
