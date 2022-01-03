@@ -66,8 +66,8 @@ class SvgPathMove {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let svg_3 = document.getElementById("svg_3") as unknown as SVGPathElement;
-    let canvas = document.getElementById('canv') as HTMLCanvasElement;
+    let svg_3: SVGPathElement = document.querySelector("#svg_3")!;
+    let canvas: HTMLCanvasElement = document.querySelector('#canv')!;
     let ctx = canvas.getContext("2d")!;
     let svgPath = new SvgPath(svg_3);
     let move = new SvgPathMove(svgPath);

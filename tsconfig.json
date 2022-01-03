@@ -4,6 +4,7 @@
         "moduleResolution": "node",
         "strict": true,
         "esModuleInterop": true,
+        "isolatedModules": true,
         "forceConsistentCasingInFileNames": true,
         "sourceMap": true,
         "outDir": "dist"
