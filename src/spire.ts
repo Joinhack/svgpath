@@ -54,13 +54,22 @@ export class RGBBubbleSpire extends Bubble implements Spire {
     }
 
     update(point: Point): void {
+        let old = this.point;
         this.point = point;
+        if (old.x - point.x > 2 || 
+            old.x - point.x < -2 || 
+            old.y - point.y > 2 || 
+            old.y - point.y < -2 ) {
+            this.r = Math.floor(Math.random() * 180);
+            this.g = Math.floor(Math.random() * 60);
+            this.b = Math.floor(Math.random() * 100);
+        }
     }
 
-    private getColor(): string {
-        var r = Math.floor(Math.random() * 180);
-        var g = Math.floor(Math.random() * 160);
-        var b = Math.floor(Math.random() * 100);
+    private getColor(off: number): string {
+        var r = this.r - off;
+        var g = this.g - off;
+        var b = this.b - off;
         return `rgb(${r},${g},${b})`;
     }
     
@@ -72,8 +81,8 @@ export class RGBBubbleSpire extends Bubble implements Spire {
         ctx.shadowBlur = 80;
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
-        ctx.fillStyle = this.getColor();
-        ctx.shadowColor = this.getColor();
+        ctx.fillStyle = this.getColor(0);
+        ctx.shadowColor = this.getColor(-60);
         
         ctx.arc(x, y, radius, 0, 2 * Math.PI, true);
         ctx.globalCompositeOperation = 'lighter';
