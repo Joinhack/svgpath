@@ -1,6 +1,5 @@
 import {BubbleSpire, RGBBubbleSpire, Spire}  from "./spire";
 import { SvgPath, SvgPathMove } from "./svgpath";
-import GIF from "gif.js";
 
 
 let count = 0;
@@ -12,17 +11,9 @@ let binfGifBtnEvent = (canvas: HTMLCanvasElement) => {
         let clicked = btn.getAttribute("clicked")??"true";
         btn.setAttribute("clicked", clicked == "true"?"false":"true");
         
-        if (clicked == "true") {
-            btn.innerText = "停止录制gif";
-            gif = new GIF({
-                workers: 2,
-                quality: 10
-            });
-        } else {
-            let img: HTMLImageElement|null = document.querySelector('img');
-            img?.setAttribute("src", canvas.toDataURL("image/png"));
-            btn.innerText = "录制gif";
-        }
+        let img: HTMLImageElement|null = document.querySelector('img');
+        img?.setAttribute("src", canvas.toDataURL("image/png"));
+        btn.innerText = "录制gif";
         
      });
 };
