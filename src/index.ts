@@ -1,12 +1,38 @@
 import {BubbleSpire, RGBBubbleSpire, Spire}  from "./spire";
 import { SvgPath, SvgPathMove } from "./svgpath";
+import GIF from "gif.js";
+
 
 let count = 0;
+let gif: GIF|null = null;
+let binfGifBtnEvent = (canvas: HTMLCanvasElement) => {
+     let btn: HTMLButtonElement = document.querySelector("button")!;
+     
+     btn.addEventListener("click", () => {
+        let clicked = btn.getAttribute("clicked")??"true";
+        btn.setAttribute("clicked", clicked == "true"?"false":"true");
+        
+        if (clicked == "true") {
+            btn.innerText = "停止录制gif";
+            gif = new GIF({
+                workers: 2,
+                quality: 10
+            });
+        } else {
+            let img: HTMLImageElement|null = document.querySelector('img');
+            img?.setAttribute("src", canvas.toDataURL("image/png"));
+            btn.innerText = "录制gif";
+        }
+        
+     });
+};
 
 document.addEventListener("DOMContentLoaded", () => {
+    
     let svg_3: SVGPathElement = document.querySelector("#svg_3")!;
     let canvas: HTMLCanvasElement = document.querySelector('#canv')!;
-    let ctx = canvas.getContext("2d")!;
+    let ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
+    binfGifBtnEvent(canvas);
     let svgPath = new SvgPath(svg_3);
     let move = new SvgPathMove(svgPath);
     move.setStep(2.5);

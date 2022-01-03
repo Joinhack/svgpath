@@ -1,12 +1,23 @@
 import { Point } from "./point";
 
+/*
+ * Spire interface for draw. 
+ */
 export interface Spire {
+
     point: Point;
 
     update(point: Point): void;
     
     draw(ctx: CanvasRenderingContext2D): void;
 }
+
+
+/*
+ * Base Buddle class for calc radis. 
+ * radius increase to max size (1+radiusFactor)  then 
+ * radius reduction to min size (1-radiusFactor).
+ */
 class Bubble {
     point: Point;
     
@@ -84,11 +95,11 @@ export class RGBBubbleSpire extends Bubble implements Spire {
         let x = this.point.x;
         let y = this.point.y;
         let radius = this.getRadius();
-        ctx.shadowBlur = 80;
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
+        ctx.shadowBlur = 30;
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
         ctx.fillStyle = this.getColor(0);
-        ctx.shadowColor = this.getColor(60);
+        ctx.shadowColor = this.getColor(-60);
         ctx.arc(x, y, radius, 0, 2 * Math.PI, true);
         ctx.globalCompositeOperation = 'lighter';
         ctx.fill();
@@ -144,13 +155,13 @@ export class BubbleSpire extends Bubble implements Spire {
         let grt = ctx.createRadialGradient( x, y, 0, x, y, radius);
         grt.addColorStop(0.0, this.getColor(0));
         grt.addColorStop(1.0, this.getColor(35));
-        ctx.shadowBlur = 60;
-        ctx.shadowOffsetX = 20;
-        ctx.shadowOffsetY = 20;
+        ctx.shadowBlur = 30;
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
         ctx.globalCompositeOperation = 'lighter';
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
         ctx.fillStyle = grt;
-        ctx.shadowColor = this.getColor(100);
+        ctx.shadowColor = this.getColor(-120);
         ctx.fill();
         ctx.closePath();
     }
