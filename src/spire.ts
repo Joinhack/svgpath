@@ -7,10 +7,11 @@ export interface Spire {
     
     draw(ctx: CanvasRenderingContext2D): void;
 }
-
 class Bubble {
     point: Point;
+    
     radius: number;
+
     radiusProcessed: number;
     radForward: number;
     constructor(radius: number = 5, point?: Point) {
@@ -56,13 +57,13 @@ export class RGBBubbleSpire extends Bubble implements Spire {
     update(point: Point): void {
         let old = this.point;
         this.point = point;
-        if (old.x - point.x > 2 || 
-            old.x - point.x < -2 || 
-            old.y - point.y > 2 || 
-            old.y - point.y < -2 ) {
-            this.r = Math.floor(Math.random() * 180);
-            this.g = Math.floor(Math.random() * 60);
-            this.b = Math.floor(Math.random() * 100);
+        if (old.x - point.x > 2.5 || 
+            old.x - point.x < -2.5 || 
+            old.y - point.y > 2.5 || 
+            old.y - point.y < -2.5 ) {
+            this.r = Math.floor(Math.random() * 255) + 1;
+            this.g = Math.floor(Math.random() * 200)+ 1;
+            this.b = Math.floor(Math.random() * 155) + 1;
         }
     }
 
