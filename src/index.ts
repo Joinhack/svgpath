@@ -1,19 +1,40 @@
 import {BubbleSpire, RGBBubbleSpire, Spire}  from "./spire";
 import { SvgPath, SvgPathMove } from "./svgpath";
+import {GIFEncoder, Encoder, quantize, applyPalette, QuantizeOptions} from "gifenc";
 
 
 let count = 0;
-let gif: GIF|null = null;
+let encoder: Encoder|null = null;
 let binfGifBtnEvent = (canvas: HTMLCanvasElement) => {
      let btn: HTMLButtonElement = document.querySelector("button")!;
      
      btn.addEventListener("click", () => {
-        let clicked = btn.getAttribute("clicked")??"true";
+        let clicked = btn.getAttribute("clicked")??"false";
         btn.setAttribute("clicked", clicked == "true"?"false":"true");
-        
-        let img: HTMLImageElement|null = document.querySelector('img');
-        img?.setAttribute("src", canvas.toDataURL("image/png"));
-        btn.innerText = "录制gif";
+        if (clicked == "false") {
+            btn.innerText = "停止录制gif";
+            encoder = GIFEncoder();
+            let addFrameCall = () => {
+                if (btn.getAttribute("clicked") == "true") {
+                    let ctx = canvas.getContext("2d");
+                    let imgData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
+                    let palette = quantize(imgData?.data!, 256, {format: "rgb444"});
+                    let index = applyPalette(imgData?.data!, palette);
+                    encoder?.writeFrame(index, canvas.width, canvas.height, {palette, delay: 200});
+                    setTimeout(addFrameCall, 200);
+                }
+            };
+            addFrameCall();
+        } else {
+            encoder?.finish();
+            let img: HTMLImageElement|null = document.querySelector('img');
+            let buf = encoder?.bytesView();
+            let arrBlobPart: BlobPart[] = [buf as ArrayBuffer]; 
+            let blob = buf instanceof Blob ? buf : new Blob(arrBlobPart, { type: 'image/gif' });
+            let url = URL.createObjectURL(blob);
+            img!.src = url;
+            btn.innerText = "录制gif";
+        }
         
      });
 };
