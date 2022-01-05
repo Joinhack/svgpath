@@ -5,7 +5,6 @@ export default defineConfig({
     plugins: [viteSingleFile()],
     root: __dirname,
     base: './',
-
     build: {
         rollupOptions: {
 			inlineDynamicImports: true,
@@ -15,7 +14,6 @@ export default defineConfig({
 		},
         sourcemap: true,
     },
-    
     server: {
         port: 8080,
         open: "/index.html"
