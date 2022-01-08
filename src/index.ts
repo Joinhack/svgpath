@@ -52,7 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let sp = new BubbleSpire(idx);
     sp.radius = idx;
     move.addSpire(sp);
+    let w = canvas.width;
+    let h = canvas.height;
     let start = () => {
+        ctx.save();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+        ctx.globalCompositeOperation = 'destination-in';
+        ctx.fillRect(0, 0, w, h);
+        ctx.restore();
         count++;
         if (count % 90 == 0) {
             let sp: Spire;
@@ -70,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
             move.setStep(3);
             move.addSpire(sp)
         }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
         move.draw(ctx);
         if (move.spireLen() == 2) {
             count == 0;
@@ -79,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
             move.setStep(3);
             move.addSpire(sp);
         }
+	    
         window.requestAnimationFrame(() =>{ 
             start();
         })

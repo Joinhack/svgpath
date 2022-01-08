@@ -29,6 +29,8 @@ class Bubble {
 
     stepFactor: number = 0.03;
 
+    hasStep: boolean = true;
+
     radForward: number;
     constructor(radius: number = 5, point?: Point) {
         this.point = point??new Point(0, 0);
@@ -38,19 +40,21 @@ class Bubble {
     }
 
     getRadius(): number {
-        let factor = this.stepFactor;
-        if (this.radiusProcessed > this.radius *(1 + this.radiusFactor)) {
-            this.radForward = 0;
-        }
+        if (this.hasStep) {
+            let factor = this.stepFactor;
+            if (this.radiusProcessed > this.radius *(1 + this.radiusFactor)) {
+                this.radForward = 0;
+            }
 
-        if (this.radiusProcessed < this.radius *(1 - this.radiusFactor)) {
-            this.radForward = 1;
+            if (this.radiusProcessed < this.radius *(1 - this.radiusFactor)) {
+                this.radForward = 1;
+            }
+            if (this.radForward == 1) {
+                this.radiusProcessed *= (1 + factor);
+            } else {
+                this.radiusProcessed *= (1 - factor);
+            } 
         }
-        if (this.radForward == 1) {
-            this.radiusProcessed *= (1 + factor);
-        } else {
-            this.radiusProcessed *= (1 - factor);
-        } 
         return this.radiusProcessed;
     }
 
